@@ -15,7 +15,7 @@ extern "C" {
 
 class PacketQueue {
 public:
-    std::queue<AVPacket *> *pPacketQueue;// 队列
+    std::queue<AVPacket *> *pPacketQueue = NULL;// 队列
     pthread_mutex_t packetMutex;// 锁
     pthread_cond_t packetCond;// 信号
 

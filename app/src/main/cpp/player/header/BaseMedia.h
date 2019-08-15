@@ -23,13 +23,13 @@ class BaseMedia {
 public:
     int streamIndex = -1; // 流角标
     AVCodecContext *pCodecContext = NULL;// 解码器上下文
-    JNICallback *pJniCall;
+    JNICallback *pJniCall =NULL;
     PacketQueue *pPacketQueue = NULL;
     long totalDuration = 0;// 总时长
     double currentTime = 0;//当前时间
     double lastUpdateTime = 0;// 最后一次回调时间
     AVRational timeBase;// 时间基
-    PlayerStatus *pPlayerStatus;// 播放状态
+    PlayerStatus *pPlayerStatus=NULL;// 播放状态
 
 public:
     BaseMedia(int streamIndex, JNICallback *pJniCall, PlayerStatus *pPlayerStatus);

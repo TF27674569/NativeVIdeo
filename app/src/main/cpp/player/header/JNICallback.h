@@ -9,18 +9,19 @@
 
 #include "../header/ConstDefine.h"
 #include <cwchar>
+
 enum ThreadMode {
     THREAD_MAIN = 1, THREAD_CHILD
 };
 
 class JNICallback {
 public:
-    jmethodID prepareMid; // 准备完成了的函数id
-    jmethodID errorMid; // 异常回调的函数id
-    jmethodID progressMid; // 异常回调的函数id
-    JavaVM *javaVM;// java虚拟机（需要处理子线程的）
-    JNIEnv *jniEnv;// app环境
-    jobject javaInstance;// 对应java层的NativeCall
+    jmethodID prepareMid = NULL; // 准备完成了的函数id
+    jmethodID errorMid = NULL; // 异常回调的函数id
+    jmethodID progressMid = NULL; // 异常回调的函数id
+    JavaVM *javaVM = NULL;// java虚拟机（需要处理子线程的）
+    JNIEnv *jniEnv = NULL;// app环境
+    jobject javaInstance = NULL;// 对应java层的NativeCall
 
 public:
     JNICallback(JavaVM *javaVM, JNIEnv *jniEnv, jobject jPlayerObj);
@@ -33,7 +34,7 @@ public:
     void onPrepared(ThreadMode mode);
 
 
-    void onProgress(ThreadMode mode,int total,  double current, double progress);
+    void onProgress(ThreadMode mode, int total, double current, double progress);
 };
 
 

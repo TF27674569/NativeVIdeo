@@ -48,6 +48,6 @@ class NativeCall {
     }
 
     public void onProgress(int total, double current, double progress) {
-        Log.e("TAG", "onProgress: total:" + total + "  current:" + current + "  progress:" + progress + " thread:" + Thread.currentThread().getName());
+//        Log.e("TAG", "onProgress: total:" + total + "  current:" + current + "  progress:" + progress + " thread:" + Thread.currentThread().getName());
     }
 }

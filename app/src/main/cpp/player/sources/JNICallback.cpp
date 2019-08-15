@@ -18,6 +18,7 @@ JNICallback::JNICallback(JavaVM *javaVM, JNIEnv *jniEnv, jobject jCallback) {
 JNICallback::~JNICallback() {
     if (javaInstance != NULL) {
         jniEnv->DeleteGlobalRef(javaInstance);
+        javaInstance = NULL;
     }
 }
 
@@ -68,7 +69,7 @@ void JNICallback::onProgress(ThreadMode threadMode, int total, double current, d
             return;
         }
 
-        env->CallVoidMethod(javaInstance, progressMid, total/1000, current/1000, progress);
+        env->CallVoidMethod(javaInstance, progressMid, total / 1000, current / 1000, progress);
         javaVM->DetachCurrentThread();
     }
 }

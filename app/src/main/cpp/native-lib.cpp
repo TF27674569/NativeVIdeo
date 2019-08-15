@@ -44,7 +44,6 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_tf_player_NativePlayer_nState(JNIEnv *env, jobject instance, jboolean isPlay) {
     if (pPlayerController != NULL) {
-//        pPlayerController->pPlayerStatus->isExit = !isPlay;
         pPlayerController->setPlayState(isPlay);
     }
 }
@@ -76,6 +75,10 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_tf_player_NativePlayer_nRelease(JNIEnv *env, jobject instance) {
     if (pPlayerController != NULL) {
+        release();
+//        av_usleep(100000);
         delete pPlayerController;
+        pPlayerController = NULL;
+        LOGE("delete pPlayerController success");
     }
 }

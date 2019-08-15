@@ -19,6 +19,7 @@ add_library(
         player/sources/PacketQueue.cpp
         player/sources/AudioPlayer.cpp
         player/sources/VideoPlayer.cpp
+        player/sources/PlayerStatus.cpp
         player/header/ConstDefine.h
         native-lib.cpp)
 

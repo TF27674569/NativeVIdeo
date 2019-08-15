@@ -66,6 +66,7 @@ void BaseMedia::release() {
 
     if (pCodecContext != NULL) {
         avcodec_free_context(&pCodecContext);
+        LOGE("free codec context  %p", this);
         pCodecContext = NULL;
     }
 }

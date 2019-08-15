@@ -20,12 +20,15 @@ public:
     SwsContext *pSwsContext = NULL;
     uint8_t *pFrameBuffer = NULL;
     int frameSize;
-    AVFrame *pRgbaFrame;
-    jobject surface;
-    AudioPlayer *pAudio;
+    AVFrame *pRgbaFrame = NULL;
+    jobject surface = NULL;
+    AudioPlayer *pAudio = NULL;
     jboolean isPause = false;
     float defaultDelayTime;
 
+
+    // 一个线程去解码播放
+    pthread_t playThreadT;
     pthread_mutex_t mutex;// 锁
     pthread_cond_t cond;// 信号
 
@@ -52,7 +55,6 @@ public:
     double getFrameSleepTime(AVFrame *pFrame);
 
     void setPlayState(jboolean isPause);
-
 
 };
 

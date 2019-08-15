@@ -3,6 +3,7 @@
 //
 
 #include "../header/PacketQueue.h"
+#include "../header/ConstDefine.h"
 
 PacketQueue::PacketQueue() {
     // 初始化队列
@@ -22,6 +23,8 @@ PacketQueue::~PacketQueue() {
         pthread_mutex_destroy(&packetMutex);
         pthread_cond_destroy(&packetCond);
     }
+
+    LOGE("delete packet queue end  %p", this);
 }
 
 
@@ -56,6 +59,8 @@ void PacketQueue::clear() {
         av_free(pPacket);
         pPacket = NULL;
     }
+
+    LOGE("clear packet queue end  %p", this);
 }
 
 void PacketQueue::push(AVPacket *pPacket) {

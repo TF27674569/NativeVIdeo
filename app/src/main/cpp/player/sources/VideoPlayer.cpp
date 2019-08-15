@@ -18,7 +18,6 @@ VideoPlayer::~VideoPlayer() {
 
 void *threadVideoPlay(void *context) {
     VideoPlayer *pVideo = (VideoPlayer *) context;
-
     // 获取当前线程的 JNIEnv， 通过 JavaVM
     JNIEnv *env;
     if (pVideo->pJniCall->javaVM->AttachCurrentThread(&env, 0) != JNI_OK) {
@@ -60,7 +59,6 @@ void *threadVideoPlay(void *context) {
                 double frameSleepTime = pVideo->getFrameSleepTime(pFrame);
                 av_usleep(frameSleepTime * 1000000);
                 // 回调进度
-
                 double progress = (1000000 * (pVideo->currentTime) / (pVideo->totalDuration));
                 pVideo->pJniCall->onProgress(THREAD_CHILD, pVideo->totalDuration,
                                              (pVideo->currentTime) * 1000000.0, progress);
@@ -77,13 +75,11 @@ void *threadVideoPlay(void *context) {
     }
     av_packet_free(&pPacket);
     av_frame_free(&pFrame);
-
+    pthread_cond_signal(&(pVideo->cond));
     return 0;
 }
 
 void VideoPlayer::play() {
-// 一个线程去解码播放
-    pthread_t playThreadT;
     pthread_create(&playThreadT, NULL, threadVideoPlay, this);
     pthread_detach(playThreadT);
 }
@@ -107,10 +103,11 @@ void VideoPlayer::onDecodeStream(ThreadMode threadMode, AVFormatContext *pFormat
 }
 
 void VideoPlayer::release() {
+    // 线程解码 推suface数据时 可能出现正在睡眠,此时销毁队列异常
+    av_usleep(100000);
     BaseMedia::release();
     if (pSwsContext != NULL) {
         sws_freeContext(pSwsContext);
-//        free(pSwsContext);
         pSwsContext = NULL;
     }
 
@@ -123,9 +120,10 @@ void VideoPlayer::release() {
         av_frame_free(&pRgbaFrame);
         pRgbaFrame = NULL;
     }
-    // 大家要注意, pJniCall 需要在 DZFFmpeg 之后销毁
+
     if (pJniCall != NULL) {
         pJniCall->jniEnv->DeleteGlobalRef(surface);
+        surface = NULL;
     }
 
     pthread_mutex_destroy(&mutex);
